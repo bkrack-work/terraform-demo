@@ -1,6 +1,10 @@
 pipeline {
 
-  agent any
+  agent {
+    kubernetes {
+      label 'mylabel'
+    }
+  }
 
   environment {
     SVC_ACCOUNT_KEY = credentials('terraform-auth')
@@ -12,7 +16,7 @@ pipeline {
       steps {
         checkout scm
         sh 'mkdir -p creds' 
-        sh 'echo $SVC_ACCOUNT_KEY | base64 -di > ./creds/serviceaccount.json'
+        sh 'echo $SVC_ACCOUNT_KEY | base64 -d > ./creds/serviceaccount.json'
       }
     }
 
